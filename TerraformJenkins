@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        maven 'maven'
+    }
     environment {
         AWS_ACCESS_KEY_ID = credentials('aws-credentials')  // Fetch Access Key
         AWS_SECRET_ACCESS_KEY = credentials('aws-credentials')  // Fetch Secret Key
@@ -8,6 +11,11 @@ pipeline {
         stage("Pull  the Soruce Code") {
             steps {
                 git 'https://github.com/bhoomikadk16/terraform-ansible.git'
+            }
+        }
+        stage("Prepare Build") {
+            steps {
+                sh 'mvn clean package'
             }
         }
         stage("Terraform init") {
